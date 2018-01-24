@@ -1,0 +1,121 @@
+<div class="search-case-form-container">
+  <form (ngSubmit)="searchForCases(SearchCaseFilesForm.value, SearchCaseFilesForm.valid)" name="SearchCaseFilesForm" method="post" [formGroup]="SearchCaseFilesForm">
+    <input type="hidden" formControlName="archived">
+    <div class="rows">
+      <div>
+        <label for="caseReference">Case reference: </label>
+        <input
+          #focusedElement
+          class="form-input" formControlName="caseReference" id="caseReference"
+          tabindex="250">
+
+        <div *ngIf="SearchCaseFilesForm.hasError('minCompletedFields') && submitted"
+             class="error message">
+          <div>
+            Please provide search criteria in one of the fields below
+          </div>
+        </div>
+        <div *ngIf="SearchCaseFilesForm.controls['caseReference'].hasError('wildCardMinLength') && SearchCaseFilesForm.controls['caseReference'].touched && SearchCaseFilesForm.controls['caseReference'].invalid && submitted"
+             class="error message">
+          <div>
+            Wildcard (*) searches must have a minimum of three characters
+          </div>
+        </div>
+
+        <div *ngIf="SearchCaseFilesForm.hasError('wildcard') && submitted"
+             class="error message">
+          <div>
+            At least one other field must be completed without a Wildcard (*)
+          </div>
+        </div>
+        <div *ngIf="SearchCaseFilesForm.controls['caseReference'].hasError('wildCardUsedMoreThanOnce') && submitted"
+             class="error message">
+          <div>
+            Multiple wild cards are not allowed in any one field
+          </div>
+        </div>
+        <div *ngIf="SearchCaseFilesForm.hasError('wildcardLimit') && submitted"
+             class="error message">
+          <div>
+            Only one wildcard can be used per search
+          </div>
+        </div>
+      </div>
+      <div>
+        <label for="surname">Surname: </label>
+        <input class="form-input" type="text" formControlName="surname" id="surname"
+               tabindex="260">
+        <div *ngIf="SearchCaseFilesForm.controls['surname'].hasError('wildCardMinLength') && SearchCaseFilesForm.controls['surname'].touched && SearchCaseFilesForm.controls['surname'].invalid  && submitted"
+             class="error message">
+          <div>
+            Wild card searches must have a minimum of three characters
+          </div>
+        </div>
+
+        <div *ngIf="SearchCaseFilesForm.controls['surname'].hasError('wildCardUsedMoreThanOnce') && submitted"
+             class="error message">
+          <div>
+            Multiple wild cards are not allowed in any one field
+          </div>
+        </div>
+      </div>
+      <div></div>
+      <div>
+        <button type="submit" class="button button-primary" title="Search" #target tabindex="290">
+          <span *ngIf="!(loading$ | async)">Search</span>
+          <i class="fa fa-circle-o-notch fa-spin" aria-hidden="true" *ngIf="loading$ | async"></i>
+        </button>
+      </div>
+    </div>
+    <div class="rows">
+      <div>
+        <label for="dateOfBirth">Date of birth: </label>
+        <my-date-picker name="dateOfBirth" [options]="myDatePickerOptions" formControlName="dateOfBirth" id="dateOfBirth"></my-date-picker>
+        <div *ngIf="SearchCaseFilesForm.controls['dateOfBirth'].hasError('invalidDate') && SearchCaseFilesForm.controls['dateOfBirth'].touched && SearchCaseFilesForm.controls['dateOfBirth'].invalid  && !SearchCaseFilesForm.hasError('minCompletedFields') && submitted"
+             class="error message">
+          <div>
+            Date of birth search must have a valid format (dd/mm/yyyy)
+          </div>
+        </div>
+
+      </div>
+      <div>
+        <label for="forename">Forename(s): </label>
+        <input
+          class="form-input"
+          formControlName="forename"
+          id="forename"
+          tabindex="270"
+        >
+        <div *ngIf="SearchCaseFilesForm.controls['forename'].hasError('wildCardMinLength') && SearchCaseFilesForm.controls['forename'].touched && SearchCaseFilesForm.controls['forename'].invalid  && submitted"
+             class="error message">
+          <div>
+            Wild card searches must have a minimum of three characters
+          </div>
+        </div>
+        <div *ngIf="SearchCaseFilesForm.controls['forename'].hasError('wildCardUsedMoreThanOnce') && submitted"
+             class="error message">
+          <div>
+            Multiple wild cards are not allowed in any one field
+          </div>
+        </div>
+      </div>
+      <div>
+        <button type="button" class="button button-secondary" title="Clear Search" (click)="reset()" tabindex="300">Clear
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+<app-case-search-results-list *ngIf="!(loading$ | async)"
+  [caseFiles]="caseFiles$ | async"
+  [query]="convert(query$ | async)"
+  [loading]="loading$ | async"
+  [error]="error$ | async"
+  [openCaseFiles]="linkedDocumentCaseFile$ | async"
+  [linkedDocuments]="linkedDocuments$ | async"
+  [caseFileToLink]="caseFileToLink$ | async"
+  (caseFilesToLinkToDocumentsEmitter)="sendCaseFilesToBeLinkedToDocumentsToStore($event)"
+  (addToMyCasesEmitter)="addToMyCases($event)">
+</app-case-search-results-list>
+

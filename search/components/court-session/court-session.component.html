@@ -1,0 +1,71 @@
+<div class="search-court-session-form-container">
+  <form [formGroup]="SearchCourtSessionsForm"
+        (ngSubmit)="searchCourtSessions(SearchCourtSessionsForm.value, SearchCourtSessionsForm.valid)"
+        name="SearchCourtSessionsForm">
+    <div class="rows">
+      <div>
+        <label> Courthouse: </label>
+        <select formControlName="courthouse" class="form-input" tabindex="590" #focusedElement>
+          <option value="" selected>---------------------------------------------------------------</option>
+          <ng-container *ngFor="let courtHouse of courtHouses$ | async ">
+            <option *ngIf="courtHouse.visible === 'true'" value="{{courtHouse.name}}"> {{courtHouse.name}}</option>
+          </ng-container>
+        </select>
+        <div *ngIf="SearchCourtSessionsForm.hasError('minCompletedFields') && submitted"
+             class="error message">
+          <div>
+            Please provide search criteria in one of the fields below
+          </div>
+        </div>
+      </div>
+      <div>
+        <label> Time: </label>
+        <select formControlName="time" class="form-input" tabindex="600">
+          <option value="" selected>---------------------------------------------------------------</option>
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+          <option value="All Day">All Day</option>
+        </select>
+      </div>
+      <div>
+      </div>
+      <div>
+        <button class="button button-primary" title="Search" #target tabindex="630"><span *ngIf="!(loading$ | async)">Search</span>
+          <i class="fa fa-circle-o-notch fa-spin" aria-hidden="true" *ngIf="loading$ | async"></i>
+        </button>
+      </div>
+    </div>
+    <div class="rows">
+      <div>
+        <label> Courtroom: </label>
+        <select formControlName="courtroom" class="form-input" tabindex="610">
+          <option value="" selected>---------------------------------------------------------------</option>
+          <ng-container *ngFor="let courtRoom of courtRooms$ | async ">
+            <option value="{{courtRoom}}"> {{courtRoom}}</option>
+          </ng-container>
+        </select>
+      </div>
+      <div>
+        <label> Date: </label>
+        <my-date-picker name="date" [options]="myDatePickerOptions" formControlName="date" id="date"></my-date-picker>
+        <div *ngIf="SearchCourtSessionsForm.controls['date'].hasError('invalidDate') && SearchCourtSessionsForm.controls['date'].touched && !SearchCourtSessionsForm.hasError('minCompletedFields') && submitted"
+             class="error message">
+          <div>
+            Court hearing date search must have a valid format (dd/mm/yyyy)
+          </div>
+        </div>
+      </div>
+      <div>
+        <button type="button" title="Clear Search" class="button button-secondary" (click)="reset()" tabindex="640"> Clear
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<app-court-session-results-list *ngIf="!(loading$ | async)"
+  [courtSessions]="courtSessions$ | async"
+  [query]="convert(query$ | async)"
+  [loading]="loading$ | async"
+  [error]="error$ | async"
+></app-court-session-results-list>

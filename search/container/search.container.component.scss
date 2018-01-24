@@ -1,0 +1,24 @@
+.search-container {
+
+  padding: 10px;
+  font-size: 0;
+
+
+  > div {
+
+    display: inline-block;
+    font-size: 14px;
+
+
+    &:first-child {
+      width: 20%;
+      vertical-align: top;
+    }
+    &:last-child {
+      width: 80%;
+
+    }
+
+  }
+}
+

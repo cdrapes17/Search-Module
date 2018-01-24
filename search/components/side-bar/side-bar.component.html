@@ -1,0 +1,20 @@
+<div class="side-bar-container">
+  <ul class="side-bar">
+    <a [routerLinkActive]="['active']" class="side-bar-link case-file" [routerLink]="['/search/case-file']" title="Search for a case file" tabindex="240">
+      <i class="fa fa-folder-open-o" aria-hidden="true"></i> Search for case file
+    </a>
+    <ng-container *ngFor="let link of links | keys">
+      <a [routerLinkActive]="['active']" class="side-bar-link judge-hearing-list" [routerLink]="['/search/judge-hearing-list']" *ngIf="link.key === 'casefiles-by-hearing'" title="Search for judge's hearing list" tabindex="370">
+        <i class="fa fa-list" aria-hidden="true"></i> Search for judge's hearing list
+      </a>
+    </ng-container>
+    <a [routerLinkActive]="['active']" class="side-bar-link archived-case-file" [routerLink]="['/search/archived-case-file']" title="Search for archived case file" tabindex="480">
+      <i class="fa fa-archive" aria-hidden="true"></i> Search for archived case file
+    </a>
+    <ng-container *ngFor="let link of links | keys">
+      <a [routerLinkActive]="['active']" class="side-bar-link" [routerLink]="['/search/court-session']" *ngIf="link.key === 'courtsessions'" title="Search for a court session" tabindex="580">
+        <i class="fa fa-gavel" aria-hidden="true"></i> Search for a court session
+      </a>
+    </ng-container>
+  </ul>
+</div>

@@ -1,0 +1,73 @@
+<div class="alert alert-warning" *ngIf="caseFiles.length === 0 && !loading && query !== null && error === null">
+  <i class="fa fa-exclamation-circle" aria-hidden="true" style="padding-right: 10px;"></i>Sorry we did not find any
+  results for
+  <ng-container *ngIf="query !== null">
+    <ng-container *ngFor="let q of  query | keys;">
+      {{convertKey(q.key)}} :
+      <strong>"{{convertValue(q.value)}}"</strong>
+    </ng-container>
+    .
+  </ng-container>
+</div>
+
+
+<div class="alert alert-warning" *ngIf="caseFiles.length === 0 && !loading && query !== null && error !== null">
+  <i class="fa fa-exclamation-circle" aria-hidden="true" style="padding-right: 10px;"></i>
+  {{error.message}}
+</div>
+
+<div class="results-list-container" *ngIf="caseFiles.length >= 1" #tableWrapper>
+  <ngx-datatable class="ngx-datatable material" tabindex="320" #table
+                 [rows]="caseFiles"
+                 [externalPaging]="false"
+                 [columnMode]="'force'"
+                 [columns]="columns"
+                 [sorts]="sorts"
+                 [sortType]="'multi'"
+                 [footerHeight]="40"
+                 [rowHeight]="'auto'"
+                 [rowClass]="partial(getActiveCaseFileRowClass, [linkedDocuments, isLinkedDocumentInCaseFile])"
+                 [limit]="15"
+                 [selected]="selected"
+                 [selectCheck]="partial(checkActiveCaseFileNotLinkedToDocument, [linkedDocuments])"
+                 [selectionType]="'multi'"
+                 (activate)="onActivate($event)"
+                 (select)="onSelect($event)">
+    <ngx-datatable-column prop="icon" [minWidth]="50" [maxWidth]="50" [name]="' '">
+      <ng-template let-icon="value" ngx-datatable-cell-template>
+        <i class="fa fa-folder-open" title="Open case" aria-hidden="true"></i>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="caseReference" [minWidth]="220" [name]="'Case reference'">
+      <ng-template let-caseReference="value" ngx-datatable-cell-template>
+        {{caseReference}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="surname" [name]="'Surname'" [minWidth]="160">
+      <ng-template let-surname="value" ngx-datatable-cell-template>
+        {{surname}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="forenames" [name]="'Forename(s)'" [minWidth]="160">
+      <ng-template let-forenames="value" ngx-datatable-cell-template>
+        {{forenames}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="dateOfBirth" [name]="'Date of birth'" [minWidth]="115" >
+      <ng-template let-dateOfBirth="value" ngx-datatable-cell-template>
+        {{dateOfBirth | date: 'dd/MM/yyyy'}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="favIcon" [minWidth]="50" [maxWidth]="50" [name]="' '">
+      <ng-template let-favIcon="value" ngx-datatable-cell-template>
+        <i class="fa fa-star" title="Add case to favourites" aria-hidden="true"></i>
+      </ng-template>
+    </ngx-datatable-column>
+
+  </ngx-datatable>
+</div>

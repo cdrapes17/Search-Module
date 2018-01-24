@@ -1,0 +1,58 @@
+<div class="alert alert-warning" *ngIf="!courtSessions.length && !loading && query !== null && error === null">
+  <span><i class="fa fa-exclamation-circle" aria-hidden="true" style="padding-right: 10px;"></i>Sorry we did not find any results for</span>
+  <ng-container *ngIf=" query !== null">
+    <ng-container *ngFor="let q of  query | keys;">
+      {{convertKey(q.key)}} :
+      <strong>"{{convertValue(q.value)}}"</strong>
+    </ng-container>
+    .
+  </ng-container>
+</div>
+
+<div class="alert alert-warning" *ngIf="courtSessions.length === 0 && !loading && query !== null && error !== null">
+  <i class="fa fa-exclamation-circle" aria-hidden="true" style="padding-right: 10px;"></i>
+  {{error.message}}
+</div>
+<div class="results-list-container" *ngIf="courtSessions.length >= 1" #tableWrapper>
+  <ngx-datatable class="ngx-datatable material" tabindex="650" [rows]="courtSessions" [externalPaging]="false" [columnMode]="'force'"
+    [columns]="courtSessionColumns" [sorts]="courtSessionSort" [sortType]="'multi'" [footerHeight]="40" [rowHeight]="'auto'" #table
+    [limit]="15" [selectionType]="'single'" (activate)="onActivate($event)">
+
+    <ngx-datatable-column prop="icon" [minWidth]="50" [maxWidth]="50" [name]="' '">
+      <ng-template let-icon="value" ngx-datatable-cell-template>
+        <i class="fa fa-gavel" title="Open court session" aria-hidden="true"></i>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="courthouse" [minWidth]="220" [name]="'Courthouse'">
+      <ng-template let-courthouse="value" ngx-datatable-cell-template>
+        {{courthouse}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="courtroom" [name]="'Courtroom'">
+      <ng-template let-courtroom="value" ngx-datatable-cell-template>
+        {{courtroom}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="date" [name]="'Date'" [minWidth]="160">
+      <ng-template let-date="value" ngx-datatable-cell-template>
+        {{date | date: 'dd/MM/yyyy'}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="time" [name]="'Time'" [minWidth]="75">
+      <ng-template let-time="value" ngx-datatable-cell-template>
+        {{time}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="activeStatus" [name]="'Activated'">
+      <ng-template let-activeStatus="value" ngx-datatable-cell-template>
+        {{activeStatus}}
+      </ng-template>
+    </ngx-datatable-column>
+
+  </ngx-datatable>
+</div>

@@ -1,0 +1,38 @@
+@import "../../../../assets/scss/buttons";
+
+.side-bar-container{
+
+  ul {
+      a {
+        display: block;
+        padding: 17px 20px 12px 10px;
+        font-size: 16px;
+        color: $black;
+        background-color: $lighterGrey;
+        border: 1px solid $lightGrey;
+        margin-bottom: 5px;
+        -webkit-transition: background-color 0.3s;
+        -moz-transition: background-color 0.3s;
+        -ms-transition: background-color 0.3s;
+        -o-transition: background-color 0.3s;
+        transition: background-color 0.3s;
+
+        &:hover {
+
+          text-decoration: none;
+          background-color: lighten($lighterGrey, 3);
+        }
+      }
+      .active {
+        background-color: $greener;
+        color: $white;
+
+        &:hover {
+          background-color: lighten($greener, 3);
+        }
+      }
+  }
+  .fa {
+    padding-right: 10px;
+  }
+}
